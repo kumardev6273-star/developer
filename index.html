@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aesthetic Memory Garden 🌸</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:url('last.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .hidden { display: none !important; }
+
+    /* --- 1. LOCK SCREEN --- */
+    .lock-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      /* ⬇️ Yahan inverted commas ke beech apni photo ka naam ya path likh de ⬇️ */
+      background: url('bg.jpg') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .lock-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 320px;
+    }
+
+    .lock-icon { font-size: 38px; display: block; margin-bottom: 8px; }
+
+    .pass-dots {
+      font-size: 24px;
+      letter-spacing: 12px;
+      color: #ff758c;
+      margin: 15px 0;
+      height: 35px;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .keypad button {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: none;
+      background: #ffffff;
+      color: #514245;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+
+    .keypad button:active {
+      transform: scale(0.92);
+      background: #ff758c;
+      color: #fff;
+    }
+
+    /* --- 2. ENVELOPE SCREEN --- */
+    .envelope-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('bg1.jpg') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .envelope-box {
+      background: rgba(30, 20, 30, 0.75); /* Halka dark transparent box */
+      backdrop-filter: blur(10px);
+      width: 290px;
+      height: 190px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border: 2px dashed #ff94b8; /* Theme ke mutabiq pink/sunset border */
+      transition: transform 0.3s ease;
+    }
+
+    .envelope-box p { 
+      font-size: 15px; 
+      color: #ffd1dc; /* Text ka color light pink kar diya taaki saaf dikhe */
+      margin-top: 10px; 
+      font-weight: 600; 
+    }
+  
+
+    .envelope-box:hover { transform: scale(1.05) rotate(-1deg); }
+    .envelope-box span { font-size: 55px; }
+    .envelope-box p { font-size: 15px; color: #d46a84; margin-top: 10px; font-weight: 600; }
+
+    /* --- 3. MAIN DASHBOARD / GALLERY --- */
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 50px 20px;
+      position: relative;
+      min-height: 100vh;
+      background: transparent; 
+    }
+    .header-title {
+      font-size: 28px;
+      color: #d45d79;
+      margin-bottom: 40px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    /* STICKERS */
+    .sticker {
+      position: absolute;
+      width: 80px;
+      height: 70px;
+      border-radius: 20px;
+      background: #ffe3e8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      border: 4px solid #ffffff;
+      z-index: 20;
+      animation: floatSticker 4s ease-in-out infinite alternate;
+    }
+
+    .sticker-left { top: 80px; left: 20px; }
+    .sticker-right { bottom: 80px; right: 20px; }
+
+    @keyframes floatSticker {
+      0% { transform: translateY(0) rotate(-4deg); }
+      100% { transform: translateY(-15deg) rotate(6deg); }
+    }
+.extra-1 { top: 50%; left: 25px; transform: translateY(-50%) rotate(-5deg); }
+.extra-2 { top: 50%; right: 25px; transform: translateY(-50%) rotate(5deg); }
+.extra-3 { top: 85%; left: 200px; transform: rotate(12deg); }
+.extra-4 { top: 85%; right: 200px; transform: rotate(-12deg); }
+    /* COLLAGE CONTAINER */
+  .collage-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+    .polaroid {
+      background: #070707;
+      padding: 14px 14px 40px 14px;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      width: 220px;
+      position: relative;
+      transition: transform 0.3s ease;
+      border: 1px solid #fce4ec;
+    }
+
+    .polaroid:hover {
+      transform: scale(1.08) rotate(0deg) !important;
+      z-index: 30;
+    }
+
+    .polaroid:nth-child(1) { transform: rotate(-5deg); }
+    .polaroid:nth-child(2) { transform: rotate(3deg); }
+    .polaroid:nth-child(4) { transform: rotate(-4deg); }
+    .polaroid:nth-child(5) { transform: rotate(6deg); }
+
+    .polaroid-img-wrap {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      border-radius: 8px;
+      background: #ffd1dc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 50px;
+      overflow: hidden;
+    }
+
+    canvas.scratch-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    /* FLIPPABLE NOTE CARD */
+    .flip-card {
+      background-color: transparent;
+      width: 220px;
+      height: 274px;
+      perspective: 1000px;
+      cursor: pointer;
+      transform: rotate(2deg);
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%; height: 100%;
+      text-align: center;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%; height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    .flip-card-front {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      color: #ffffff;
+      border: 4px solid #ffffff;
+    }
+
+    .flip-card-front .note-icon {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
+
+    .flip-card-front p {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .flip-card-back {
+      background: #ffffff;
+      border: 2px solid #ffb6c1;
+      color: #4a3e3d;
+      transform: rotateY(180deg);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .side-decor {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 15px;
+  z-index: 25;
+  border: 3px solid #ffffff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.flower-1 { top: 20px; left: 20px; transform: rotate(-10deg); }
+.flower-2 { top: 20px; right: 20px; transform: rotate(10deg); }
+.sticker-1 { bottom: 20px; left: 20px; transform: rotate(10deg); }
+.sticker-2 { bottom: 20px; right: 20px; transform: rotate(-10deg); }
+.horizontal-note {
+    width: 600px;
+    min-height: 180px;
+    background: #ffe4e6;
+    border: 3px solid #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    padding: 20px;
+    text-align: center;
+}
+
+.horizontal-note:hover {
+    transform: scale(1.02);
+}
+
+.horizontal-note p {
+    font-size: 20px;
+    color: #d946ef;
+    font-weight: bold;
+}
+
+.note-inside {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.inside-photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 3px solid #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.hidden{
+  display: none;
+}
+</style>
+</head>
+<body>
+<div id="main-dashboard" class="dashboard">
+    <!-- 1. SABSE UPAR: Saari Photos / Scratch Cards -->
+    <h3 style="text-align: center; color: #b2535d; font-size: 24px; margin-bottom: 20px;">Scratch & Discover Memories ✨</h3>
+    <div class="collage-container">
+        <div class="polaroid">
+            <div class="polaroid-img-wrap"><span><img src="1.jpg" alt="Memory" style="width: 100%; height: 100%; object-fit: cover;"></span>
+            <canvas class="scratch-canvas" width="200" height="200"></canvas></div>
+        </div>
+        <div class="polaroid">
+            <div class="polaroid-img-wrap"><span><img src="2.jpg" alt="Memory" style="width: 100%; height: 100%; object-fit: cover;"></span>
+            <canvas class="scratch-canvas" width="200" height="200"></canvas></div>
+        </div>
+        <div class="polaroid">
+            <div class="polaroid-img-wrap"><span><img src="3.jpg" alt="Memory" style="width: 100%; height: 100%; object-fit: cover;"></span>
+            <canvas class="scratch-canvas" width="200" height="200"></canvas></div>
+        </div>
+        <div class="polaroid">
+            <div class="polaroid-img-wrap"><span><img src="4.jpg" alt="Memory" style="width: 100%; height: 100%; object-fit: cover;"></span>
+            <canvas class="scratch-canvas" width="200" height="200"></canvas></div>
+        </div>
+    </div>
+
+    <!-- 2. USKE NEECHE: Bada Horizontal Note -->
+    <div class="horizontal-note" onclick="openBigNote()">
+        <div class="note-front" id="noteFront">
+            <p>💖 Tap To Open This Note ✨</p>
+        </div>
+        <div class="note-inside hidden" id="noteInside" >
+            <img src="us.jpg" alt="Memory" class="inside-photo">
+            <p style="color: #3D1C02; font-family: 'Poppins', sans-serif; font-size: 17px; font-weight: 500; line-height: 1.8;">
+                Happy girlfriend day meri pyari sundar gulgulliii fulguli bhonduuuuuu 💋💋<br>
+                Aap hmesha happy happy rho ✋ or mujhe bhi rkho 🥰😘😭😭<br>
+                Hmesha time pe khana khao jisse aapko dawai na khani pde <br>
+                Jada socha mtt kro me kahi nhi jaunga 😂 <br>
+                Khudka dimag kharab mtt kra kro uske liye me hu 😎 <br>
+                I promise me hmesha aapke saath hi rhunga kabhi nhi jaunga 🎬 😘 <br>
+                I love you soooooo muchhhhhh 💋 💋 💋 💋 💋 💋 💋 💋 💋 💋 💋 💋<br>
+                 Once again Happy girlfriend's day meri pyari betuu 😘 🌷 💖
+                 </p>
+            </p>
+        </div>
+    </div>
+</div>
+ 
+  <!-- 1. LOCK SCREEN -->
+  <div id="lock-screen" class="lock-bg">
+    <div class="lock-card">
+      <img src="bhondu.jpg" alt="Lock Photo" style="width: 75px; height: 75px; border-radius: 12px; border: none;  outline:none; object-fit: cover; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.8);">
+      <h3 style="color: #d45d79; font-size: 18px;">Acha time yaad kro🤭🤭😭</h3>
+      <div class="pass-dots" id="pass-display">••••</div>
+      <div class="keypad">
+        <button onclick="press('1')">1</button>
+        <button onclick="press('2')">2</button>
+        <button onclick="press('3')">3</button>
+        <button onclick="press('4')">4</button>
+        <button onclick="press('5')">5</button>
+        <button onclick="press('6')">6</button>
+        <button onclick="press('7')">7</button>
+        <button onclick="press('8')">8</button>
+        <button onclick="press('9')">9</button>
+        <button onclick="clearPin()">C</button>
+        <button onclick="press('0')">0</button>
+        <button onclick="submitPin()">✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ENVELOPE SCREEN -->
+  <div id="envelope-screen" class="envelope-screen hidden">
+    <div class="envelope-box" onclick="openEnvelope()">
+      <span>💌</span>
+      <p>Tap To Open Your Secret Letter ✨</p>
+    </div>
+  </div>
+<img src="cutu.jpg" class="side-decor flower-1" alt="Flower 1">
+<img src="flow.jpg" class="side-decor flower-2" alt="Flower 2">
+<img src="cute.jpg" class="side-decor sticker-1" alt="Sticker 1">
+<img src="flow.jpg" class="side-decor sticker-2" alt="Sticker 2">
+<img src="bubu.jpg" class="side-decor extra-1" alt="Extra 1">
+<img src="flow1.jpg" class="side-decor extra-2" alt="Extra 2">
+<img src="cutuu.jpg" class="side-decor extra-3" alt="Extra 3">
+<img src="flow11 (2).png" class="side-decor extra-4" alt="Extra 4">
+  <!-- 3. MAIN DASHBOARD -->
+  <div id="main-dashboard" class="dashboard hidden">
+    
+    <div class="sticker sticker-right">✨</div>
+
+    <h2 class="header-title">Scratch & Discover Memories ✨</h2>
+
+    <div class="collage-container">
+      
+      <!-- Card 1 -->
+      <div class="polaroid">
+        <div class="polaroid-img-wrap">
+          <span>💖</span>
+          <canvas class="scratch-canvas" width="200" height="220"></canvas>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="polaroid">
+        <div class="polaroid-img-wrap">
+          <span>🌸</span>
+          <canvas class="scratch-canvas" width="200" height="220"></canvas>
+        </div>
+      </div>
+
+      <!-- Note Card -->
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="note-icon">💌</div>
+            <p>Tap To Flip Note</p>
+          </div>
+          <div class="flip-card-back">
+            <p>"Every memory with you is special! Scratch all the cards to reveal the surprises ❤️"</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="polaroid">
+        <div class="polaroid-img-wrap">
+          <span>💋</span>
+          <canvas class="scratch-canvas" width="200" height="220"></canvas>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="polaroid">
+        <div class="polaroid-img-wrap">
+          <span>🌷</span>
+          <canvas class="scratch-canvas" width="200" height="220"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Scratch karte waqt pop-pop effect lane ke liye function
+function triggerPopEffect(x, y) {
+    const emojis = ['💖', '💋', '🌸', '🌷', '💫', '💗'];
+    const pop = document.createElement('div');
+    pop.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    pop.style.position = 'fixed';
+    pop.style.left = x + 'px';
+    pop.style.top = y + 'px';
+    pop.style.fontSize = '24px';
+    pop.style.pointerEvents = 'none';
+    pop.style.zIndex = '9999';
+    pop.style.transition = 'all 0.8s ease-out';
+    
+    document.body.appendChild(pop);
+
+    // Thoda upar ki taraf udate hue gayab ho jayega
+    setTimeout(() => {
+        pop.style.transform = 'translateY(-60px) scale(1.4)';
+        pop.style.opacity = '0';
+    }, 20);
+
+    // 1 second baad DOM se hata dena
+    setTimeout(() => {
+        pop.remove();
+    }, 800);
+}
+
+    const PIN = "0802";
+    let inputPin = "";
+
+    function press(n) {
+      if (inputPin.length < 4) {
+        inputPin += n;
+        updateDots();
+      }
+    }
+
+    function clearPin() {
+      inputPin = "";
+      updateDots();
+    }
+function openBigNote() {
+    document.getElementById('noteFront').style.display = 'none';
+    document.getElementById('noteInside').classList.remove('hidden');
+}
+    function updateDots() {
+      let d = "";
+      for (let i = 0; i < 4; i++) {
+        d += i < inputPin.length ? "•" : "◦";
+      }
+      document.getElementById("pass-display").innerText = d;
+    }
+
+    function submitPin() {
+      if (inputPin === PIN) {
+        document.getElementById('lock-screen').classList.add('hidden');
+        document.getElementById('envelope-screen').classList.remove('hidden');
+      } else {
+        alert("BHONDUUU HI HO KYA PURE 🫩👺");
+        clearPin();
+      }
+    }
+
+    function openEnvelope() {
+      document.getElementById('envelope-screen').classList.add('hidden');
+      document.getElementById('main-dashboard').classList.remove('hidden');
+      initScratchCards();
+    }
+
+    function initScratchCards() {
+      const canvases = document.querySelectorAll('.scratch-canvas');
+
+      canvases.forEach(canvas => {
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffb6c1';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.font = "14px Poppins, sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        ctx.fillText("Scratch Here! ✨", canvas.width / 2, canvas.height / 2);
+
+        let isDrawing = false;
+
+        function scratch(e) {
+          if (!isDrawing) return;
+          
+          const rect = canvas.getBoundingClientRect();
+          const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+          const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+          triggerPopEffect(clientX, clientY);
+          const x = clientX - rect.left;
+          const y = clientY - rect.top;
+
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.beginPath();
+          ctx.arc(x, y, 22, 0, Math.PI * 2, false);
+          ctx.fill();
+        }
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+
+        canvas.addEventListener('touchstart', () => isDrawing = true);
+        canvas.addEventListener('touchend', () => isDrawing = false);
+        canvas.addEventListener('touchmove', scratch);
+      });
+    }
+  </script>
+</body>
+</html>
